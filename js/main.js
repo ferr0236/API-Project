@@ -4,7 +4,15 @@ let imageSizes = [];
 
 document.addEventListener("DOMContentLoaded", () => {
 	getDataFromLocalStorage();
+	addEventListeners();
 });
+
+function addEventListeners() {
+	let searchButton = document.querySelector(".searchButtonDiv");
+	searchButton.addEventListener("click", () => {
+		window.alert("aaa");
+	});
+}
 
 function getDataFromLocalStorage() {
 	// check if image secure base url and sizes arrays are saved in local storage, if not call getPosterURLAndSizes()
@@ -23,8 +31,7 @@ function getPosterURLAndSizes() {
 	}).then( (data) => {
 		console.log(data);
 		
-		imageURL = data["images"]["
-								  secure_base_url"];
+		imageURL = data["images"]["secure_base_url"];
 		imageSizes = data["images"]["poster_sizes"];
 		
 		console.log(imageURL);
