@@ -80,8 +80,8 @@ MODAL
 	transform: translate(-50%, -50%);
 	text-align: center;
 	position: fixed;
-	width: 25rem;
-	height: 10rem;
+	width: 50%;
+	height: 20%;
 	z-index: 200;
 	border: 1px hsla(227, 100%, 30%, 1) solid;
 	padding: 1px;
