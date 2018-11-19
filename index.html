@@ -3,11 +3,12 @@
 <head>
 	<meta charset="UTF-8">
 	<title>API Project</title>
-	<link href="css/main.css" rel="stylesheet"/>
+	<link href="css/main.css" rel="stylesheet" />
 </head>
 
 <body>
 	<main>
+
 		<div class="home active">
 			<section class="header">
 				<h1>Television Recommendations</h1>
@@ -28,12 +29,32 @@
 			</section>
 		</div>
 
+		<div class="overlay "></div>
+		<div class="modal">
+			<div class="title">
+				Preferences
+			</div>
+			<div class="message">
+				<form action="#">
+					<div class="options">
+						<span><input type="radio" name="tvContentType" value="movie" />&nbsp;Movie</span>
+						<span><input type="radio" name="tvContentType" value="person" />&nbsp;Person</span>
+						<span><input type="radio" name="tvContentType" value="tv" />&nbsp;TV Show</span>
+					</div>
+					<div class="actions">
+						<button>Cancel</button>
+						<button>Save</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
 		<div class="result">
 			<section class="search">
-				
+
 			</section>
 			<section class="content">
-				
+
 			</section>
 		</div>
 	</main>
