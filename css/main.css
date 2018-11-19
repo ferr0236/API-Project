@@ -88,6 +88,7 @@ MODAL
 	display: flex;
   	flex-direction: column;
 	font-weight: bolder;
+	transition: transform 0.5s ease;
 }
 .modal .title {
 	background-color: hsla(227, 100%, 70%, 1);
@@ -121,9 +122,10 @@ MODAL
 }
 .modal button {
 	width: 10rem;
-	height: 1.5rem;
+	height: 1.7rem;
 	background-color: hsla(227, 100%, 70%, 1);
 	border: none;
+	border-radius: 0.2rem;
 	color: hsla(227, 100%, 30%, 1);
 	font-weight: bold;
 }
@@ -136,6 +138,10 @@ MODAL
 }
 .modal button:nth-child(2) {
 	margin-left: 0.5rem;
+}
+.modal-off {
+	transform: translateY(-800%);
+	transition: transform 0.5s ease;
 }
 .overlay {
 	background-color: hsla(0, 0%, 0%, 0.8);

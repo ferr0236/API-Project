@@ -12,6 +12,36 @@ function addEventListeners() {
 	searchButton.addEventListener("click", () => {
 		window.alert("aaa");
 	});
+	
+	let settingsButton = document.querySelector(".settingsButtonDiv");
+	settingsButton.addEventListener("click", (e) => {
+		showSettingsModal(e);
+	});
+	
+	let modalCancelButton = document.querySelector("#modalCancelButton");
+	modalCancelButton.addEventListener("click", () => {
+		hideSettingsModal();
+	});
+}
+
+function showSettingsModal(e) {
+	e.preventDefault();
+	e.stopPropagation();
+	
+	let modal = document.querySelector(".modal");
+	modal.classList.remove("modal-off");
+	modal.addEventListener("keydown", (e) => {
+		if (e.key == "Escape") {
+			hideSettingsModal();
+		}
+	});
+	modal.focus();
+	document.querySelector(".overlay").classList.remove("inactive");
+}
+
+function hideSettingsModal() {
+	document.querySelector(".modal").classList.add("modal-off");
+		document.querySelector(".overlay").classList.add("inactive");
 }
 
 function getDataFromLocalStorage() {
