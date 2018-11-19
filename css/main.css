@@ -80,7 +80,7 @@ MODAL
 	text-align: center;
 	position: fixed;
 	width: 80%;
-	height: 22%;
+	height: 10rem;
 	z-index: 200;
 	border: 1px hsla(227, 100%, 30%, 1) solid;
 	padding: 1px;
