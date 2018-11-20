@@ -17,12 +17,6 @@ html {
 	display: none;
 }
 
-input {
-	outline: none;
-	border-radius: 0;
-	-webkit-appearance: none;
-}
-
 /************
 HOME PAGE
 *************/
@@ -55,7 +49,7 @@ HOME PAGE
 }
 
 .settingsButtonDiv {
-	padding: 0.2rem;
+	padding: 0.2rem 0;
 	cursor: pointer;
 }
 
@@ -63,19 +57,22 @@ HOME PAGE
 	background-color: white;
 	border: 1px black solid;
 	border-left: none;
-	padding: 0.2rem;
+	padding: 0.2rem 0;
 	cursor: pointer;
-	margin-left: -2px;
+	margin-left: -1px;
 }
 
 .searchInput {
-	padding: 0.2rem;
+	padding: 0.2rem 0;
 	flex-basis: 40%;
 	border: 1px black solid;
 	border-right: none;
 	font-size: 1rem;
 	text-align: center;
 	transition: flex-basis 1s ease;
+	outline: none;
+	border-radius: 0;
+	-webkit-appearance: none;
 }
 
 .searchInput:focus {
