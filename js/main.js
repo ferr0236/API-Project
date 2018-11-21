@@ -5,23 +5,43 @@ let imageSizes = [];
 document.addEventListener("DOMContentLoaded", () => {
 	getDataFromLocalStorage();
 	addEventListeners();
+	showPage(".home");
 });
 
 function addEventListeners() {
-	let searchButton = document.querySelector(".searchButtonDiv");
+	let searchButton = document.querySelector(".home .searchButtonDiv");
 	searchButton.addEventListener("click", () => {
-		window.alert("aaa");
+		showPage(".result");
 	});
 	
-	let settingsButton = document.querySelector(".settingsButtonDiv");
-	settingsButton.addEventListener("click", (e) => {
-		showSettingsModal(e);
+	let backButton = document.querySelector(".backButtonDiv");
+	backButton.addEventListener("click", () => {
+		showPage(".home");
+	});
+	
+	let settingsButton = document.querySelectorAll(".settingsButtonDiv");
+	settingsButton.forEach( (item) => { 
+		item.addEventListener("click", (e) => {
+			showSettingsModal(e);
+		});
 	});
 	
 	let modalCancelButton = document.querySelector("#modalCancelButton");
 	modalCancelButton.addEventListener("click", () => {
 		hideSettingsModal();
 	});
+}
+
+function showPage(pageClass) {
+	let currentActivePage = document.querySelector(".active");
+	if (currentActivePage) {
+		currentActivePage.classList.remove("active");
+		currentActivePage.classList.add("inactive");
+	}
+	
+	let pageToBeActived = document.querySelector(pageClass);
+	pageToBeActived.classList.remove("inactive");
+	pageToBeActived.classList.add("active");
 }
 
 function showSettingsModal(e) {

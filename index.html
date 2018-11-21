@@ -5,20 +5,21 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 	<title>API Project</title>
 	<link href="css/main.css" rel="stylesheet" />
+	<link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet"/>
 </head>
 
 <body>
 	<main>
 
-		<div class="home active">
+		<div class="home inactive">
 			<section class="header">
 				<h1>Television Recommendations</h1>
 			</section>
-			<section class="main">
+			<section class="search">
 				<form action="#">
-					<input type="text" id="search-input" class="searchInput" placeholder="Enter Search Data" />
+					<input type="text" id="searchInput" class="searchInput" placeholder="Enter Search Data" />
 					<div class="searchButtonDiv">
-						<img id="search-button" alt="Search" title="Search" data-src="img/magnifying-glass.svg" class="iconic iconic-md" />
+						<img id="searchButton" alt="Search" title="Search" data-src="img/magnifying-glass.svg" class="iconic iconic-md" />
 					</div>
 					<div class="settingsButtonDiv">
 						<img id="settingsButton" alt="Settings" title="Settings" data-src="img/settings-lg.svg" class="iconic iconic-md" />
@@ -50,12 +51,47 @@
 			</div>
 		</div>
 
-		<div class="result">
+		<div class="result inactive">
 			<section class="search">
-
+				<form action="#">
+					<div class="backButtonDiv">
+						<img id="backButton" alt="Back" title="Back" data-src="img/caret-left-lg.svg" class="iconic iconic-md" />
+					</div>
+					<input type="text" id="searchInput" class="searchInput" placeholder="Enter Search Data" />
+					<div class="searchButtonDiv">
+						<img id="searchButton" alt="Search" title="Search" data-src="img/magnifying-glass.svg" class="iconic iconic-md" />
+					</div>
+					<div class="settingsButtonDiv">
+						<img id="settingsButton" alt="Settings" title="Settings" data-src="img/settings-lg.svg" class="iconic iconic-md" />
+					</div>
+				</form>
 			</section>
 			<section class="content">
-
+				<div class="pagesResult">
+					<p>Results 1 - 20 from a total of 60 for "Star trek"</p>
+					<p>Click on a title to get recommendations</p>
+				</div>
+				<div class="videoCard">
+					<div class="photo">
+						<img src="img/no_image_available.jpg"/>
+					</div>
+					<div class="description">
+						<div class="heading">
+							<h2 class="title">Star Trek</h2>
+							<p class="date">2009-050-06</p>
+							<x-star-rating>
+								<div class="ion-ios-star"></div>
+								<div class="ion-ios-star-half"></div>
+								<div class="ion-ios-star-outline"></div>
+							</x-star-rating>
+						</div>
+						<div class="body">
+							<p class="plot">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus quod perspiciatis architecto, doloribus quibusdam veritatis eos velit eligendi, repudiandae excepturi sit. Totam sunt, fugiat facere quas aut nam deleniti commodi.
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus quod perspiciatis architecto, doloribus quibusdam veritatis eos velit eligendi, repudiandae excepturi sit. Totam sunt, fugiat facere quas aut nam deleniti commodi.
+							</p>
+						</div>
+					</div>
+				</div>
 			</section>
 		</div>
 	</main>
