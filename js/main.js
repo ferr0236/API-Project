@@ -1,92 +1,88 @@
-const movieDataBaseUrl = "https://api.themoviedb.org/3/";
-let imageURL = null;
-let imageSizes = [];
+var app = {
+	init: () => {
+		history.replaceState({}, "Home", "#home");
+		app.addDefaultEventListener();
+		app.showPage(".home");
+		app.setPosterURLAndImagesSizesInLocalStorage();
+		setInterval(() => {
+			app.setPosterURLAndImagesSizesInLocalStorage();
+		}, 3600000);
+	},
 
-document.addEventListener("DOMContentLoaded", () => {
-	getDataFromLocalStorage();
-	addEventListeners();
-	showPage(".home");
-});
-
-function addEventListeners() {
-	let searchButton = document.querySelector(".home .searchButtonDiv");
-	searchButton.addEventListener("click", () => {
-		showPage(".result");
-	});
-	
-	let backButton = document.querySelector(".backButtonDiv");
-	backButton.addEventListener("click", () => {
-		showPage(".home");
-	});
-	
-	let settingsButton = document.querySelectorAll(".settingsButtonDiv");
-	settingsButton.forEach( (item) => { 
-		item.addEventListener("click", (e) => {
-			showSettingsModal(e);
-		});
-	});
-	
-	let modalCancelButton = document.querySelector("#modalCancelButton");
-	modalCancelButton.addEventListener("click", () => {
-		hideSettingsModal();
-	});
-}
-
-function showPage(pageClass) {
-	let currentActivePage = document.querySelector(".active");
-	if (currentActivePage) {
-		currentActivePage.classList.remove("active");
-		currentActivePage.classList.add("inactive");
-	}
-	
-	let pageToBeActived = document.querySelector(pageClass);
-	pageToBeActived.classList.remove("inactive");
-	pageToBeActived.classList.add("active");
-}
-
-function showSettingsModal(e) {
-	e.preventDefault();
-	e.stopPropagation();
-	
-	let modal = document.querySelector(".modal");
-	modal.classList.remove("modal-off");
-	modal.addEventListener("keydown", (e) => {
-		if (e.key == "Escape") {
-			hideSettingsModal();
+	showPage: (pageClass) => {
+		let currentActivePage = document.querySelector(".active");
+		if (currentActivePage) {
+			currentActivePage.classList.remove("active");
+			currentActivePage.classList.add("inactive");
 		}
-	});
-	modal.focus();
-	document.querySelector(".overlay").classList.remove("inactive");
-}
 
-function hideSettingsModal() {
-	document.querySelector(".modal").classList.add("modal-off");
-		document.querySelector(".overlay").classList.add("inactive");
-}
+		let pageToBeActived = document.querySelector(pageClass);
+		pageToBeActived.classList.remove("inactive");
+		pageToBeActived.classList.add("active");
+	},
 
-function getDataFromLocalStorage() {
-	// check if image secure base url and sizes arrays are saved in local storage, if not call getPosterURLAndSizes()
-	
-	// if in local storage check if saved over 60 minutes ago, if true call getPosterYRLAndSizes()
-	
-	// in local storage and < 60 mintueos old,  Load and use from local storage
-	getPosterURLAndSizes();
-}
+	addDefaultEventListener: () => {
+		let settingsButton = document.querySelectorAll(".settingsButtonDiv");
+		settingsButton.forEach((item) => {
+			item.addEventListener("click", (e) => {
+				modal.showModal(e);
+			});
+		});
 
-function getPosterURLAndSizes() {
-	let url = `${movieDataBaseUrl}configuration?api_key=${APIKEY}`;
-	
-	fetch(url).then( (response) => {
-		return response.json();	
-	}).then( (data) => {
-		console.log(data);
-		
-		imageURL = data["images"]["secure_base_url"];
-		imageSizes = data["images"]["poster_sizes"];
-		
-		console.log(imageURL);
-		console.log(imageSizes);
-	}).catch( (error) => {
-		console.log(error);
-	});
-}
+		window.addEventListener("hashchange", () => {
+			let page = location.hash;
+			if (page != "") {
+				app.showPage(`.${page.substr(1)}`);
+			}
+		});
+
+		document.querySelectorAll(".searchInput").forEach((input) => {
+			input.addEventListener("keydown", (e) => {
+				if (e.key == "Enter") {
+					app.submitForm(input.parentNode);
+				}
+			});
+		});
+
+		document.querySelectorAll(".searchButtonDiv").forEach((item) => {
+			item.addEventListener("click", () => {
+				app.submitForm(item.parentNode);
+			});
+		});
+
+		document.querySelectorAll(".home form, .result form").forEach((form) => {
+			form.addEventListener("submit", (e) => {
+				e.preventDefault();
+				if (e.target.name == "formHome") {
+					history.pushState({}, "Result Page", "#result");
+					app.showPage(".result");
+					document.querySelector("form[name=formResult] .searchInput").value = document.querySelector("form[name=formHome] .searchInput").value;
+				}
+				search.performSearch(e.target.querySelector(".searchInput").value);
+			});
+		});
+	},
+
+	submitForm: (form) => {
+		if (!form.checkValidity()) {
+			form.reportValidity();
+		} else {
+			form.dispatchEvent(new Event("submit"));
+		}
+	},
+
+	setPosterURLAndImagesSizesInLocalStorage: () => {
+		let url = `${variables.BASE_URL_API}configuration?api_key=${variables.API_KEY}`;
+
+		fetch(url).then((response) => {
+			return response.json();
+		}).then((data) => {
+			localStorage.setItem(variables.IMAGE_URL, data["images"]["secure_base_url"]);
+			localStorage.setItem(variables.IMAGE_SIZES, data["images"]["poster_sizes"]);
+		}).catch((error) => {
+			console.log(error);
+		});
+	}
+};
+
+document.addEventListener("DOMContentLoaded", app.init);

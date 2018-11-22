@@ -1,3 +1,10 @@
+:root {
+	--darkBlue: hsla(227, 100%, 30%, 1);
+	--lightBlue: hsla(227, 100%, 70%, 1);
+	--white: white;
+	--lighterBlue: hsla(227, 100%, 90%, 1);
+}
+
 * {
 	margin: 0;
 	padding: 0;
@@ -6,7 +13,7 @@
 }
 
 html {
-	background-color: hsla(227, 100%, 70%, 1);
+	background-color: var(--lightBlue);
 }
 
 .active {
@@ -34,12 +41,12 @@ HOME PAGE
 }
 
 .home h1 {
-	color: hsla(227, 100%, 30%, 1);
+	color: var(--darkBlue);
 	font-size: 2.5rem;
 }
 
 .home h2 {
-	color: hsla(227, 100%, 30%, 1);
+	color: var(--darkBlue);
 }
 
 .search form {
@@ -56,7 +63,7 @@ HOME PAGE
 }
 
 .searchButtonDiv {
-	background-color: white;
+	background-color: var(--white);
 	border: 1px black solid;
 	border-left: none;
 	margin-left: -1px;
@@ -92,7 +99,7 @@ MODAL
 	max-width: 80%;
 	height: 10rem;
 	z-index: 200;
-	border: 1px hsla(227, 100%, 30%, 1) solid;
+	border: 1px var(--darkBlue) solid;
 	padding: 1px;
 	display: flex;
 	flex-direction: column;
@@ -103,7 +110,7 @@ MODAL
 }
 
 .modal .title {
-	background-color: hsla(227, 100%, 70%, 1);
+	background-color: var(--lightBlue);
 	width: 100%;
 	color: white;
 	flex-basis: 20%;
@@ -114,7 +121,7 @@ MODAL
 }
 
 .modal .message {
-	background-color: hsla(227, 100%, 30%, 1);
+	background-color: var(--darkBlue);
 	width: 100%;
 	color: white;
 	flex-basis: 80%;
@@ -139,7 +146,7 @@ MODAL
 .modal button {
 	width: 10rem;
 	height: 1.7rem;
-	background-color: hsla(227, 100%, 70%, 1);
+	background-color: var(--lightBlue);
 	border: none;
 	border-radius: 0.2rem;
 	color: hsla(227, 100%, 30%, 1);
@@ -148,7 +155,7 @@ MODAL
 }
 
 .modal button:hover {
-	background-color: hsla(227, 100%, 90%, 1);
+	background-color: var(--litghterBlue);
 	cursor: pointer;
 }
 
@@ -171,22 +178,23 @@ MODAL
 RESULT PAGE
 *************/
 .result {
-	color:	hsla(227, 100%, 30%, 1);
+	color: var(--darkBlue);
 }
 
 .result .search {
-	background-color: hsla(227, 100%, 30%, 1);
+	background-color: var(--darkBlue);
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
 	height: 5rem;
-	border-bottom: 5px groove hsla(227, 100%, 30%, 1);
+	border-bottom: 5px groove var(--darkBlue);
 	position: fixed;
 	width: 100%;
 	z-index: 100;
 }
 
-.result .pagesResult, .content {
+.result .pagesResult,
+.content {
 	position: relative;
 	text-align: center;
 	margin: 0 1rem;
@@ -194,6 +202,7 @@ RESULT PAGE
 	flex-direction: column;
 	top: 5.5rem;
 }
+
 .result .pagesResult {
 	font-size: 1.5rem;
 	font-weight: bold;
@@ -201,10 +210,16 @@ RESULT PAGE
 
 .videoCard {
 	display: flex;
-	border: 5px groove hsla(227, 100%, 30%, 1);
+	border: 5px groove var(--darkBlue);
 	justify-content: space-between;
 	margin-top: 1rem;
 	padding: 0.3rem;
+	transform: scale(1);
+}
+
+.videoCard:hover {
+	transform: scale(1.03);
+	transition: transform 0.5s ease;
 }
 
 .videoCard .description {
@@ -213,9 +228,8 @@ RESULT PAGE
 	text-align: center;
 }
 
-.videoCard .photo{
-	display: flex;
-	flex-direction: column;
+.videoCard .photo {
+	display: inline-flex;
 }
 
 .videoCard .heading {
@@ -224,18 +238,25 @@ RESULT PAGE
 
 .videoCard .plot {
 	text-align: justify;
-	color:	white;
+	color: white;
 }
 
 @media(min-width: 350px) {
 	.videoCard {
 		flex-direction: column;
-		border: 5px groove hsla(227, 100%, 30%, 1);
+		border: 5px groove var(--darkBlue);
 	}
-	
-	.videoCard .photo{
+
+	.videoCard .photo {
+		flex-direction: column;
 		max-width: 100%;
 	}
+
+	.videoCard .photo img {
+		width: 100%;
+		height: 100%;
+	}
+
 }
 
 @media(min-width: 600px) {
@@ -243,12 +264,18 @@ RESULT PAGE
 		flex-direction: row;
 	}
 
-	.videoCard .photo{
+	.videoCard .photo {
 		max-width: 30%;
 	}
-	
+
+	.videoCard .photo img {
+		max-width: 180px;
+		height: 100%;
+	}
+
 	.videoCard .description {
 		margin-left: 0.3rem;
+		width: 81%;
 	}
 }
 
@@ -258,7 +285,7 @@ RESULT PAGE
 		flex-wrap: wrap;
 		justify-content: space-between;
 	}
-	
+
 	.videoCard {
 		flex-basis: calc(50% - 1rem);
 	}
