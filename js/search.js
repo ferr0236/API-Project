@@ -11,7 +11,9 @@ var search = {
 		let backButton = document.querySelector(".backButtonDiv");
 		backButton.addEventListener("click", () => {
 			document.querySelector("form[name=formHome] .searchInput").value = document.querySelector("form[name=formResult] .searchInput").value;
-			history.back();
+			location.href = location.href.substr(0,location.href.indexOf("#"));
+			app.init();
+			
 		});
 
 		document.querySelector(".priorPageButtonDiv").addEventListener("click", (e) => {
@@ -101,6 +103,7 @@ var search = {
 			return response.json();
 		}).then((data) => {
 			console.log(data);
+			document.querySelector(".result .searchInput").value = title;
 
 			search.getPosterURLAndImagesSizesInLocalStorage();
 
