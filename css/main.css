@@ -155,7 +155,7 @@ MODAL
 }
 
 .modal button:hover {
-	background-color: var(--litghterBlue);
+	background-color: var(--lighterBlue);
 	cursor: pointer;
 }
 
@@ -193,7 +193,7 @@ RESULT PAGE
 	z-index: 100;
 }
 
-.result .pagesResult,
+.result .pagesResult, .result .paginationButtons,
 .content {
 	position: relative;
 	text-align: center;
@@ -208,6 +208,17 @@ RESULT PAGE
 	font-weight: bold;
 }
 
+.result .paginationButtons {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.result .paginationButtons div{
+	cursor: pointer;
+	margin: 0.5rem 0.5rem 0;
+}
+
 .videoCard {
 	display: flex;
 	border: 5px groove var(--darkBlue);
@@ -215,6 +226,7 @@ RESULT PAGE
 	margin-top: 1rem;
 	padding: 0.3rem;
 	transform: scale(1);
+	cursor: pointer;
 }
 
 .videoCard:hover {
