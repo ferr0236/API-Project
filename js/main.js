@@ -11,6 +11,7 @@ var app = {
 		setInterval(() => {
 			app.setPosterURLAndImagesSizesInLocalStorage();
 		}, 3600000);
+		search.currentUrlFunction = search.getSearchUrlApi;
 	},
 
 	showPage: (pageClass) => {

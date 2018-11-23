@@ -2,6 +2,7 @@ var search = {
 	imageURL: "",
 	imageSizes: [],
 	currentPage: 1,
+	currentUrlFunction: null,
 
 	init: () => {
 		search.addResultPageEventListeners();
@@ -29,8 +30,8 @@ var search = {
 		});
 	},
 
-	createVideoCard: (photoUrl, title, date, rating, plot) => {
-		let template = `<div class="videoCard" onclick="search.performSearch('${title}',1,true)">
+	createVideoCard: (photoUrl, title, id, date, rating, plot) => {
+		let template = `<div class="videoCard" onclick="search.getRecommendationsById('${id}')">
 							<div class="photo">`;
 		if (photoUrl) {
 			template += `<picture>
@@ -111,26 +112,45 @@ var search = {
 		search.imageURL = localStorage.getItem(variables.IMAGE_URL);
 		search.imageSizes = localStorage.getItem(variables.IMAGE_SIZES).split(",");
 	},
+	
+	getSearchUrlApi: (searchType, searchParam, page) => {
+		return `${variables.BASE_URL_API}search/${searchType}?api_key=${variables.API_KEY}&query=${searchParam}&page=${page}`;
+	},
+	
+	getRecommendationUrlApi: (searchType, searchParam, page) => {
+		return `${variables.BASE_URL_API}${searchType}/${searchParam}/recommendations?api_key=${variables.API_KEY}&page=${page}`;
+	},
 
-	performSearch: (title, page, createHistory) => {
+	getRecommendationsById: (id) => {
+		search.currentUrlFunction = search.getRecommendationUrlApi;
+		search.performSearch(id, 1, true);
+	},
+	
+	performSearch: (searchParam, page, createHistory) => {
 		let searchType = localStorage.getItem(variables.SEARCH_TYPE);
-		let url = `${variables.BASE_URL_API}search/${searchType}?api_key=${variables.API_KEY}&query=${title}&page=${page}`;
+		let url = search.currentUrlFunction.call(this, searchType, searchParam, page);
 
 		fetch(url).then((response) => {
-			return response.json();
+			if (response.ok) {
+				return response.json();
+			} else {
+				throw Error(response.statusText);
+			}
+			
 		}).then((data) => {
-			document.querySelector(".result .searchInput").value = title;
+			console.log(data);
+			document.querySelector(".result .searchInput").value = searchParam;
 
 			search.getPosterURLAndImagesSizesInLocalStorage();
 
 			document.querySelector(".result .content").innerHTML = "";
 
-			search.createPaginationResult(data["results"].length, data["page"], data["total_results"], data["total_pages"], title);
+			search.createPaginationResult(data["results"].length, data["page"], data["total_results"], data["total_pages"], searchParam);
 
 			if (createHistory) {
 				history.pushState({
-					"search": title
-				}, title, "#result?title=" + title + "?page=" + page);
+					"search": searchParam
+				}, searchParam, "#result?searchParam=" + searchParam + "?page=" + page);
 			}
 
 			data["results"].forEach((item) => {
@@ -166,7 +186,7 @@ var search = {
 						overview = item.overview;
 						break;
 				}
-				document.querySelector(".result .content").innerHTML = document.querySelector(".result .content").innerHTML + search.createVideoCard(photo, title, date, rating, overview);
+				document.querySelector(".result .content").innerHTML = document.querySelector(".result .content").innerHTML + search.createVideoCard(photo, title, item.id, date, rating, overview);
 			});
 		}).catch((error) => {
 			alert(error);
