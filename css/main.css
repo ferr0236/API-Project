@@ -30,6 +30,9 @@ html {
 .logo-moviedb {
 	width: 20%;
 }
+.iconic:not(#searchButton) * {
+	fill: var(--lighterBlue);
+}
 
 h1,h2 {
 	font-family: 'Slabo 27px', serif;
