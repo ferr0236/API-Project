@@ -1,10 +1,9 @@
 var app = {
 	init: () => {
 		if (location.hash) {
-			history.replaceState({}, location.hash.substr(1), location.hash);	
-		}
-		else {
-			history.replaceState({}, "Home", "#home");	
+			history.replaceState({}, location.hash.substr(1), location.hash);
+		} else {
+			history.replaceState({}, "Home", "#home");
 		}
 		app.addDefaultEventListener();
 		app.showPage(`.${location.hash.substr(1)}`);
@@ -37,10 +36,10 @@ var app = {
 		window.addEventListener("hashchange", () => {
 			let page = location.hash;
 			if (page != "") {
-				if (page.indexOf("?") != -1){
+				if (page.indexOf("?") != -1) {
 					app.showPage(`.${page.substr(1,page.indexOf("?")-1)}`);
-					let title = page.substr(page.indexOf("?")+1).split("?")[0].split("=")[1];
-					let numPage = page.substr(page.indexOf("?")+1).split("?")[1].split("=")[1]
+					let title = page.substr(page.indexOf("?") + 1).split("?")[0].split("=")[1];
+					let numPage = page.substr(page.indexOf("?") + 1).split("?")[1].split("=")[1]
 					search.performSearch(title, numPage, false);
 				} else {
 					app.showPage(`.${page.substr(1)}`);
@@ -70,7 +69,7 @@ var app = {
 					app.showPage(".result");
 					document.querySelector("form[name=formResult] .searchInput").value = document.querySelector("form[name=formHome] .searchInput").value;
 				}
-				search.performSearch(e.target.querySelector(".searchInput").value,1, true);
+				search.performSearch(e.target.querySelector(".searchInput").value, 1, true);
 			});
 		});
 	},

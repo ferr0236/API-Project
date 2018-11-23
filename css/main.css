@@ -24,6 +24,10 @@ html {
 	display: none !important;
 }
 
+.logo-moviedb {
+	width: 20%;
+}
+
 /************
 HOME PAGE
 *************/
@@ -76,7 +80,7 @@ HOME PAGE
 	border-right: none;
 	font-size: 1rem;
 	text-align: center;
-	transition: flex-basis 1s ease;
+	transition: flex-basis 1s ease-in;
 	outline: none;
 	border-radius: 0;
 	-webkit-appearance: none;
@@ -84,7 +88,7 @@ HOME PAGE
 
 .searchInput:focus {
 	flex-basis: 70%;
-	transition: flex-basis 1s ease;
+	transition: flex-basis 1s ease-in;
 }
 
 /************
@@ -193,7 +197,8 @@ RESULT PAGE
 	z-index: 100;
 }
 
-.result .pagesResult, .result .paginationButtons,
+.result .pagesResult,
+.result .paginationButtons,
 .content {
 	position: relative;
 	text-align: center;
@@ -214,9 +219,14 @@ RESULT PAGE
 	justify-content: center;
 }
 
-.result .paginationButtons div{
+.result .paginationButtons div {
 	cursor: pointer;
 	margin: 0.5rem 0.5rem 0;
+}
+
+.result .paginationButtons:last-child {
+	top: 6rem;
+	margin-bottom: 1rem;
 }
 
 .videoCard {

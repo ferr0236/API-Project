@@ -11,17 +11,21 @@ var search = {
 		let backButton = document.querySelector(".backButtonDiv");
 		backButton.addEventListener("click", () => {
 			document.querySelector("form[name=formHome] .searchInput").value = document.querySelector("form[name=formResult] .searchInput").value;
-			location.href = location.href.substr(0,location.href.indexOf("#"));
+			location.href = location.href.substr(0, location.href.indexOf("#"));
 			app.init();
-			
+
 		});
 
-		document.querySelector(".priorPageButtonDiv").addEventListener("click", (e) => {
-			history.back();
+		document.querySelectorAll(".priorPageButtonDiv").forEach((item) => {
+			item.addEventListener("click", (e) => {
+				history.back();
+			});
 		});
 
-		document.querySelector(".nextPageButtonDiv").addEventListener("click", (e) => {
-			search.performSearch(document.querySelector(".result .searchInput").value, currentPage + 1, true);
+		document.querySelectorAll(".nextPageButtonDiv").forEach((item) => {
+			item.addEventListener("click", (e) => {
+				search.performSearch(document.querySelector(".result .searchInput").value, currentPage + 1, true);
+			});
 		});
 	},
 
@@ -72,21 +76,34 @@ var search = {
 	},
 
 	createPaginationResult: (itemsPerPage, currentPage, totalItems, totalPages, title) => {
-		document.querySelector(".pagesResult").innerHTML = `<p>Results ${currentPage == totalPages ? totalItems - itemsPerPage : itemsPerPage * (currentPage -1) + 1} - ${currentPage == totalPages ? totalItems : itemsPerPage * currentPage} from a total of ${totalItems} for ${title}</p>
+		document.querySelector(".pagesResult").innerHTML = `<p>Results ${currentPage == totalPages ? totalItems - itemsPerPage + 1 : itemsPerPage * (currentPage -1) + 1} - ${currentPage == totalPages ? totalItems : itemsPerPage * currentPage} from a total of ${totalItems} for ${title}</p>
 				<p>Click on a title to get recommendations</p>`;
 
 		window.currentPage = currentPage;
-		let priorPageButton = document.querySelector(".priorPageButtonDiv");
+		let priorPageButtons = document.querySelectorAll(".priorPageButtonDiv");
 		if (currentPage > 1) {
-			priorPageButton.classList.remove("inactive");
+			search.showPaginationButtons(priorPageButtons);
 		} else {
-			priorPageButton.classList.add("inactive");
+			search.hidePaginationButtons(priorPageButtons);
 		}
 
+		let nextPageButtons = document.querySelectorAll(".nextPageButtonDiv");
 		if (totalPages > 1 && currentPage < totalPages) {
-			document.querySelector(".nextPageButtonDiv").classList.remove("inactive");
+			search.showPaginationButtons(nextPageButtons);
 		} else {
-			document.querySelector(".nextPageButtonDiv").classList.add("inactive");
+			search.hidePaginationButtons(nextPageButtons);
+		}
+	},
+
+	showPaginationButtons: (buttons) => {
+		for (let x = 0; x < buttons.length; x++) {
+			buttons[x].classList.remove("inactive");
+		}
+	},
+
+	hidePaginationButtons: (buttons) => {
+		for (let x = 0; x < buttons.length; x++) {
+			buttons[x].classList.add("inactive");
 		}
 	},
 
@@ -102,7 +119,6 @@ var search = {
 		fetch(url).then((response) => {
 			return response.json();
 		}).then((data) => {
-			console.log(data);
 			document.querySelector(".result .searchInput").value = title;
 
 			search.getPosterURLAndImagesSizesInLocalStorage();
@@ -112,9 +128,11 @@ var search = {
 			search.createPaginationResult(data["results"].length, data["page"], data["total_results"], data["total_pages"], title);
 
 			if (createHistory) {
-				history.pushState({"search":title}, title, "#result?title="+title+"?page="+page);
+				history.pushState({
+					"search": title
+				}, title, "#result?title=" + title + "?page=" + page);
 			}
-			
+
 			data["results"].forEach((item) => {
 				let photo = "";
 				let title = "";
@@ -141,7 +159,7 @@ var search = {
 						overview += "</div>"
 						break;
 					case "tv":
-						photo = item.profile_path;
+						photo = item.poster_path;
 						title = item.original_name;
 						date = item.first_air_date;
 						rating = item.vote_average;
