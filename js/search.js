@@ -76,7 +76,7 @@ var search = {
 	},
 
 	createPaginationResult: (itemsPerPage, currentPage, totalItems, totalPages, title) => {
-		document.querySelector(".pagesResult").innerHTML = `<p>Results ${currentPage == totalPages ? totalItems - itemsPerPage + 1 : itemsPerPage * (currentPage -1) + 1} - ${currentPage == totalPages ? totalItems : itemsPerPage * currentPage} from a total of ${totalItems} for ${title}</p>
+		document.querySelector(".pagesResult").innerHTML = `<p>Results ${currentPage == totalPages ? (totalItems == 0 ? 0 : totalItems - itemsPerPage + 1) : itemsPerPage * (currentPage -1) + 1} - ${currentPage == totalPages ? totalItems : itemsPerPage * currentPage} from a total of ${totalItems} for ${title}</p>
 				<p>Click on a title to get recommendations</p>`;
 
 		window.currentPage = currentPage;
