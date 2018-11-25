@@ -2,7 +2,6 @@ var search = {
 	imageURL: "",
 	imageSizes: [],
 	currentPage: 1,
-	currentUrlFunction: null,
 
 	init: () => {
 		search.addResultPageEventListeners();
@@ -25,14 +24,30 @@ var search = {
 
 		document.querySelectorAll(".nextPageButtonDiv").forEach((item) => {
 			item.addEventListener("click", (e) => {
-				search.performSearch(document.querySelector(".result .searchInput").value, currentPage + 1, true);
+				
+				let queryString = location.hash.substr(location.hash.indexOf("?") + 1).split("?");
+				let searchParam = queryString[0].split("=")[1];
+				//let numPage = queryString[1].split("=")[1];
+				if (queryString.length > 2) {
+					let recommendation = queryString[2].split("=")[1].replace(/%20/g, " ");
+					search.performSearch(searchParam, currentPage + 1, true, recommendation);
+				} else {
+					search.performSearch(searchParam, currentPage + 1, true, null);
+				}
+				//search.performSearch(document.querySelector(".result .searchInput").value, currentPage + 1, true, null);
 			});
 		});
 	},
 
 	createVideoCard: (photoUrl, title, id, date, rating, plot) => {
-		let template = `<div class="videoCard" onclick="search.getRecommendationsById('${id}')">
-							<div class="photo">`;
+		let template = "";
+		if (localStorage.getItem(variables.SEARCH_TYPE) != "person") {
+			template = `<div class="videoCard" onclick='search.performSearch(${id}, 1, true, "${title.replace("\'", "")}");'>
+								<div class="photo">`;
+		} else {
+			template = `<div class="videoCard"'>
+								<div class="photo">`;
+		}
 		if (photoUrl) {
 			template += `<picture>
   						 	<source media="(min-width: 600px)" srcset="${search.imageURL+search.imageSizes[2]+photoUrl}">
@@ -113,23 +128,16 @@ var search = {
 		search.imageSizes = localStorage.getItem(variables.IMAGE_SIZES).split(",");
 	},
 	
-	getSearchUrlApi: (searchType, searchParam, page) => {
-		return `${variables.BASE_URL_API}search/${searchType}?api_key=${variables.API_KEY}&query=${searchParam}&page=${page}`;
-	},
-	
-	getRecommendationUrlApi: (searchType, searchParam, page) => {
-		return `${variables.BASE_URL_API}${searchType}/${searchParam}/recommendations?api_key=${variables.API_KEY}&page=${page}`;
-	},
-
-	getRecommendationsById: (id) => {
-		search.currentUrlFunction = search.getRecommendationUrlApi;
-		search.performSearch(id, 1, true);
-	},
-	
-	performSearch: (searchParam, page, createHistory) => {
+	performSearch: (searchParam, page, createHistory, cardVideoTitle) => {
 		let searchType = localStorage.getItem(variables.SEARCH_TYPE);
-		let url = search.currentUrlFunction.call(this, searchType, searchParam, page);
-
+		let url = "";
+		if (isNaN(searchParam)) {
+			url = `${variables.BASE_URL_API}search/${searchType}?api_key=${variables.API_KEY}&query=${searchParam}&page=${page}`;
+		}
+		else {
+			url = `${variables.BASE_URL_API}${searchType}/${searchParam}/recommendations?api_key=${variables.API_KEY}&page=${page}`;
+		}
+		
 		fetch(url).then((response) => {
 			if (response.ok) {
 				return response.json();
@@ -139,18 +147,21 @@ var search = {
 			
 		}).then((data) => {
 			console.log(data);
-			document.querySelector(".result .searchInput").value = searchParam;
 
+			let title = (cardVideoTitle ? cardVideoTitle : searchParam);
+			title = title.replace(/%20/g, " ");
+			
+			search.createPaginationResult(data["results"].length, data["page"], data["total_results"], data["total_pages"], title);
+			document.querySelector(".result .searchInput").value = title;
+			
 			search.getPosterURLAndImagesSizesInLocalStorage();
 
 			document.querySelector(".result .content").innerHTML = "";
 
-			search.createPaginationResult(data["results"].length, data["page"], data["total_results"], data["total_pages"], searchParam);
-
 			if (createHistory) {
 				history.pushState({
 					"search": searchParam
-				}, searchParam, "#result?searchParam=" + searchParam + "?page=" + page);
+				}, searchParam, "#result?searchParam=" + searchParam + "?page=" + page + (cardVideoTitle ? "?recommendation=" + cardVideoTitle : ""));
 			}
 
 			data["results"].forEach((item) => {

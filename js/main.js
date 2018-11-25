@@ -11,7 +11,6 @@ var app = {
 		setInterval(() => {
 			app.setPosterURLAndImagesSizesInLocalStorage();
 		}, 3600000);
-		search.currentUrlFunction = search.getSearchUrlApi;
 	},
 
 	showPage: (pageClass) => {
@@ -39,9 +38,16 @@ var app = {
 			if (page != "") {
 				if (page.indexOf("?") != -1) {
 					app.showPage(`.${page.substr(1,page.indexOf("?")-1)}`);
-					let title = page.substr(page.indexOf("?") + 1).split("?")[0].split("=")[1];
-					let numPage = page.substr(page.indexOf("?") + 1).split("?")[1].split("=")[1]
-					search.performSearch(title, numPage, false);
+					
+					let queryString = page.substr(page.indexOf("?") + 1).split("?");
+					let searchParam = queryString[0].split("=")[1];
+					let numPage = queryString[1].split("=")[1];
+					if (queryString.length > 2) {
+						let recommendation = queryString[2].split("=")[1].replace(/%20/g, " ");
+						search.performSearch(searchParam, numPage, false, recommendation);
+					} else {
+						search.performSearch(searchParam, numPage, false, null);
+					}
 				} else {
 					app.showPage(`.${page.substr(1)}`);
 				}
@@ -70,7 +76,7 @@ var app = {
 					app.showPage(".result");
 					document.querySelector("form[name=formResult] .searchInput").value = document.querySelector("form[name=formHome] .searchInput").value;
 				}
-				search.performSearch(e.target.querySelector(".searchInput").value, 1, true);
+				search.performSearch(e.target.querySelector(".searchInput").value, 1, true, null);
 			});
 		});
 	},
