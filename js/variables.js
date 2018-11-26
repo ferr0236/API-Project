@@ -3,5 +3,6 @@ var variables = {
 	BASE_URL_API: "https://api.themoviedb.org/3/",
 	API_KEY: "2e9be54757d1def0571743ecad3bfdcd",
 	IMAGE_URL: "IMAGE_URL",
-	IMAGE_SIZES: "IMAGE_SIZES"
+	IMAGE_SIZES: "IMAGE_SIZES",
+	LAST_UPDATE_LOCALSTORAGE: "LAST_UPDATE_LOCALSTORAGE"
 };

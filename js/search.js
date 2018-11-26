@@ -24,17 +24,12 @@ var search = {
 
 		document.querySelectorAll(".nextPageButtonDiv").forEach((item) => {
 			item.addEventListener("click", (e) => {
-				
-				let queryString = location.hash.substr(location.hash.indexOf("?") + 1).split("?");
-				let searchParam = queryString[0].split("=")[1];
-				//let numPage = queryString[1].split("=")[1];
-				if (queryString.length > 2) {
-					let recommendation = queryString[2].split("=")[1].replace(/%20/g, " ");
-					search.performSearch(searchParam, currentPage + 1, true, recommendation);
+				let queryString = app.getQueryString();
+				if (queryString.recommendation) {
+					search.performSearch(queryString.searchParam, currentPage + 1, true, queryString.recommendation);
 				} else {
-					search.performSearch(searchParam, currentPage + 1, true, null);
+					search.performSearch(queryString.searchParam, currentPage + 1, true, null);
 				}
-				//search.performSearch(document.querySelector(".result .searchInput").value, currentPage + 1, true, null);
 			});
 		});
 	},
@@ -124,11 +119,15 @@ var search = {
 	},
 
 	getPosterURLAndImagesSizesInLocalStorage: () => {
+		app.setPosterURLAndImagesSizesInLocalStorage();
 		search.imageURL = localStorage.getItem(variables.IMAGE_URL);
 		search.imageSizes = localStorage.getItem(variables.IMAGE_SIZES).split(",");
 	},
 	
 	performSearch: (searchParam, page, createHistory, cardVideoTitle) => {
+		if (!searchParam) {
+			return;
+		}
 		let searchType = localStorage.getItem(variables.SEARCH_TYPE);
 		let url = "";
 		if (isNaN(searchParam)) {

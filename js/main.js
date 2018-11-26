@@ -8,9 +8,6 @@ var app = {
 		app.addDefaultEventListener();
 		app.showPage(`.${location.hash.substr(1)}`);
 		app.setPosterURLAndImagesSizesInLocalStorage();
-		setInterval(() => {
-			app.setPosterURLAndImagesSizesInLocalStorage();
-		}, 3600000);
 	},
 
 	showPage: (pageClass) => {
@@ -34,22 +31,13 @@ var app = {
 		});
 
 		window.addEventListener("hashchange", () => {
-			let page = location.hash;
-			if (page != "") {
-				if (page.indexOf("?") != -1) {
-					app.showPage(`.${page.substr(1,page.indexOf("?")-1)}`);
-					
-					let queryString = page.substr(page.indexOf("?") + 1).split("?");
-					let searchParam = queryString[0].split("=")[1];
-					let numPage = queryString[1].split("=")[1];
-					if (queryString.length > 2) {
-						let recommendation = queryString[2].split("=")[1].replace(/%20/g, " ");
-						search.performSearch(searchParam, numPage, false, recommendation);
-					} else {
-						search.performSearch(searchParam, numPage, false, null);
-					}
+			let queryString = app.getQueryString();
+			if (queryString) {
+				app.showPage(queryString.page);
+				if (queryString.recommendation) {
+					search.performSearch(queryString.searchParam, queryString.numPage, false, queryString.recommendation);
 				} else {
-					app.showPage(`.${page.substr(1)}`);
+					search.performSearch(queryString.searchParam, queryString.numPage, false, null);
 				}
 			}
 		});
@@ -81,6 +69,32 @@ var app = {
 		});
 	},
 
+	getQueryString: () => {
+		let page = location.hash;
+		if (page != "")  {
+			let queryString = {
+				page: "",
+				searchParam: "",
+				numPage: "",
+				recommendation: ""
+			};
+			if (page.indexOf("?") != -1) {
+				queryString.page = `.${page.substr(1,page.indexOf("?")-1)}`;
+
+				let params = page.substr(page.indexOf("?") + 1).split("?");
+				queryString.searchParam = params[0].split("=")[1];
+				queryString.numPage = params[1].split("=")[1];
+				if (params.length > 2) {
+					queryString.recommendation = params[2].split("=")[1].replace(/%20/g, " ");
+				}
+			} else {
+				queryString.page = `.${page.substr(1)}`;
+			}
+			return queryString;
+		}
+		return null;
+	},
+	
 	submitForm: (form) => {
 		if (!form.checkValidity()) {
 			form.reportValidity();
@@ -89,17 +103,30 @@ var app = {
 		}
 	},
 
+	isLastUpdateLocalStorageExpired: () => {
+		let lastUpdateLocalStorage = localStorage.getItem(variables.LAST_UPDATE_LOCALSTORAGE);
+		if (lastUpdateLocalStorage) {
+			let lastUpdate = new Date(lastUpdateLocalStorage);
+			return ((lastUpdate.getTime() + 3600000) < new Date().getTime());
+		} else {
+			return true;
+		}
+		
+	},
+	
 	setPosterURLAndImagesSizesInLocalStorage: () => {
-		let url = `${variables.BASE_URL_API}configuration?api_key=${variables.API_KEY}`;
-
-		fetch(url).then((response) => {
-			return response.json();
-		}).then((data) => {
-			localStorage.setItem(variables.IMAGE_URL, data["images"]["secure_base_url"]);
-			localStorage.setItem(variables.IMAGE_SIZES, data["images"]["poster_sizes"]);
-		}).catch((error) => {
-			console.log(error);
-		});
+		if (app.isLastUpdateLocalStorageExpired()) {
+			let url = `${variables.BASE_URL_API}configuration?api_key=${variables.API_KEY}`;
+			fetch(url).then((response) => {
+				return response.json();
+			}).then((data) => {
+				localStorage.setItem(variables.IMAGE_URL, data["images"]["secure_base_url"]);
+				localStorage.setItem(variables.IMAGE_SIZES, data["images"]["poster_sizes"]);
+				localStorage.setItem(variables.LAST_UPDATE_LOCALSTORAGE, new Date().getTime());
+			}).catch((error) => {
+				console.log(error);
+			});
+		}
 	}
 };
 
