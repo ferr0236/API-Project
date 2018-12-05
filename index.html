@@ -3,10 +3,19 @@
 
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-	<title>API Project</title>
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap:   https://ssl.gstatic.com;
+    style-src 'unsafe-inline' 'self' 'unsafe-eval' https://fonts.googleapis.com https://code.ionicframework.com; 
+    font-src 'unsafe-inline' 'self' 'unsafe-eval' data: https://fonts.gstatic.com https://fonts.googleapis.com https://code.ionicframework.com;
+    script-src 'unsafe-inline' 'self' 'unsafe-eval';
+    connect-src 'unsafe-inline' 'self' 'unsafe-eval' ws: https://api.themoviedb.org/3/;
+    img-src 'unsafe-inline' 'self' 'unsafe-eval' data: content: https://image.tmdb.org;">
+
+	<meta name="format-detection" content="telephone=no">
+	<meta name="msapplication-tap-highlight" content="no">
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 	<link href="css/main.css" rel="stylesheet" />
 	<link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" />
+	<title>Movie App</title>
 </head>
 
 <body>
@@ -28,7 +37,7 @@
 			</section>
 			<section class="footer">
 				<a href="https://www.themoviedb.org/" target="_blank">
-					<img class="logo-moviedb iconic" src="./img/moviedb-logo.svg" title="The Movie DB" alt="The Movie DB"/>
+					<img class="logo-moviedb iconic" src="./img/moviedb-logo.svg" title="The Movie DB" alt="The Movie DB" />
 				</a>
 				<h2>Clauber Ferreira <sup>&copy;</sup></h2>
 			</section>
@@ -90,10 +99,11 @@
 		</div>
 	</main>
 </body>
-<script src="js/iconic.min.js" type="application/javascript"></script>
-<script src="js/variables.js" type="application/ecmascript"></script>
-<script src="js/modal.js" type="application/javascript"></script>
-<script src="js/search.js" type="application/javascript"></script>
-<script src="js/main.js" type="application/javascript"></script>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/iconic.min.js"></script>
+<script type="text/javascript" src="js/variables.js"></script>
+<script type="text/javascript" src="js/modal.js"></script>
+<script type="text/javascript" src="js/search.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
 
 </html>

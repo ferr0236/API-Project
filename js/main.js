@@ -130,4 +130,8 @@ var app = {
 	}
 };
 
-document.addEventListener("DOMContentLoaded", app.init);
+if (document.deviceready) {
+	document.addEventListener("deviceready", app.init);
+} else {
+	document.addEventListener("DOMContentLoaded", app.init);
+}
